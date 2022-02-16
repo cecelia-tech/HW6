@@ -19,7 +19,7 @@ namespace HW6
         }
 
         
-
+        //this one for attributes
         public void Tracker(object obj)
         {
             var type = typeof(Person);
@@ -35,16 +35,21 @@ namespace HW6
             var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
         }
 
+        //probably we won't need this method, it will be in a Tracker 
         public void WriteInfo(Person person)
         {
+            //instead of typeof(int), we'll probably use T
             XmlSerializer serializer = new XmlSerializer(typeof(int));
 
             using (FileStream stream = new FileStream("test.xml", FileMode.OpenOrCreate))
             {
+                //instead of this we'll have some kind of list with property and method info
                 int age = person.Age;
 
                 serializer.Serialize(stream, age);
             }
+
+            //we also would need using for desializeration!!!!!!! same issue
         }
     }
 }
