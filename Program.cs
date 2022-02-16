@@ -6,7 +6,11 @@ namespace HW6
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Logger test = new Logger("test.xml");
+
+            Person person = new Person("Simon", "Rogers", 47);
+
+            test.WriteInfo(person);
         }
     }
 }
