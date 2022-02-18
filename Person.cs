@@ -11,7 +11,7 @@ namespace HW6
         public string LastNmae { get; set; }
         [TrackingProperty(PropertyName = "Age")]
         public int age;
-        
+
 
         public Person()
         {

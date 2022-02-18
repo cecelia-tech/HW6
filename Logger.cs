@@ -3,7 +3,6 @@ using System.IO;
 using System.Reflection;
 using System.Xml.Serialization;
 using System.Collections.Generic;
-using System.Text;
 using System.Linq;
 
 namespace HW6
@@ -24,6 +23,21 @@ namespace HW6
 
         public void Tracker<T>(T obj)
         {
+            List<string> infoToStore = CollectInfo(obj);
+
+            if (infoToStore.Count() != 0 )
+            {
+                XmlSerializer serializer = new XmlSerializer(typeof(List<string>));
+
+                using (FileStream stream = new FileStream(jsonFileName, FileMode.OpenOrCreate))
+                {
+                    serializer.Serialize(stream, infoToStore);
+                }
+            }
+        }
+
+        public List<string> CollectInfo<T>(T obj)
+        {
             var type = typeof(T);
             var memberInfo = type.GetMembers();
             List<string> trackingPropertyElements = new List<string>();
@@ -32,25 +46,20 @@ namespace HW6
 
             if (p is not null)
             {
-                var filteredInfo = memberInfo.Where(x => x.GetCustomAttribute<TrackingPropertyAttribute>() != null)
+                var filteredMemberInfo = memberInfo
+                    .Where(x => x.GetCustomAttribute<TrackingPropertyAttribute>() != null)
                     .Select(x => x)
                     .ToList();
 
-                foreach (var item in filteredInfo)
+                foreach (var item in filteredMemberInfo)
                 {
                     var a = item.GetCustomAttribute<TrackingPropertyAttribute>();
 
                     trackingPropertyElements.Add($"{a.PropertyName ?? item.Name}: " +
-                        $"{(item.MemberType == MemberTypes.Field ? ((FieldInfo)item).GetValue(obj): ((PropertyInfo)item).GetValue(obj))}");
-                }
-                
-                XmlSerializer serializer = new XmlSerializer(typeof(List<string>));
-
-                using (FileStream stream = new FileStream(jsonFileName, FileMode.OpenOrCreate))
-                {
-                    serializer.Serialize(stream, trackingPropertyElements);
+                        $"{(item.MemberType == MemberTypes.Field ? ((FieldInfo)item).GetValue(obj) : ((PropertyInfo)item).GetValue(obj))}");
                 }
             }
+            return trackingPropertyElements;
         }
     }
 }
