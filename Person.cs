@@ -7,9 +7,10 @@ namespace HW6
     {
         [TrackingProperty]
         public string Name { get; set; }
-        [TrackingProperty]
+        [TrackingProperty(PropertyName = "Last name")]
         public string LastNmae { get; set; }
-        public int Age { get; set; }
+        [TrackingProperty]
+        public int age;
 
         public Person()
         {
@@ -19,7 +20,9 @@ namespace HW6
         {
             Name = name;
             LastNmae = lastNmae;
-            Age = age;
+            this.age = age;
         }
+
+        
     }
 }

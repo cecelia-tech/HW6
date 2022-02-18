@@ -10,7 +10,7 @@ namespace HW6
 
             Person person = new Person("Simon", "Rogers", 47);
 
-            test.WriteInfo(person);
+            test.Tracker(person);
         }
     }
 }
