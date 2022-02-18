@@ -26,9 +26,10 @@ namespace HW6
         {
             var type = typeof(T);
             List<string> trackingPropertyElements = new List<string>();
-            List<MemberInfo> memberInfo = new List<MemberInfo>();
-            memberInfo.AddRange(type.GetProperties());
-            memberInfo.AddRange(type.GetFields());
+            //List<MemberInfo> memberInfo = new List<MemberInfo>();
+            var memberInfo = type.GetMembers();
+            //memberInfo.AddRange(type.GetProperties());
+            //memberInfo.AddRange(type.GetFields());
             
             var p = type.GetCustomAttribute<TrackingEntityAttribute>();
 
@@ -36,12 +37,18 @@ namespace HW6
 
             if (p is not null)
             {
-                var filteredInfo = memberInfo.Where(x => x.GetCustomAttribute<TrackingPropertyAttribute>() == null)
+                var filteredInfo = memberInfo.Where(x => x.GetCustomAttribute<TrackingPropertyAttribute>() != null)
                     .Select(x => x)
                     .ToList();
 
-                    filteredInfo.ForEach(x => trackingPropertyElements.Add($"{x.GetCustomAttribute<TrackingPropertyAttribute>().PropertyName ?? x.Name}: {((FieldInfo)x).GetValue(obj) ?? ((PropertyInfo)x).GetValue(obj)}"));
+                    //filteredInfo.ForEach(x => trackingPropertyElements.Add($"{x.GetCustomAttribute<TrackingPropertyAttribute>().PropertyName ?? x.Name}: {((FieldInfo)x).GetValue(obj) ?? ((PropertyInfo)x).GetValue(obj)}"));
+                foreach (var item in filteredInfo)
+                {
+                    var a = item.GetCustomAttribute<TrackingPropertyAttribute>();
 
+                    trackingPropertyElements.Add($"{a.PropertyName ?? item.Name}: " +
+                        $"{(item.MemberType == MemberTypes.Field ? ((FieldInfo)item).GetValue(obj): ((PropertyInfo)item).GetValue(obj))}");
+                }
                 //var classProperties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
                 //var classFields = type.GetFields(BindingFlags.Public | BindingFlags.Instance);
 
