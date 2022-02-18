@@ -25,15 +25,10 @@ namespace HW6
         public void Tracker<T>(T obj)
         {
             var type = typeof(T);
-            List<string> trackingPropertyElements = new List<string>();
-            //List<MemberInfo> memberInfo = new List<MemberInfo>();
             var memberInfo = type.GetMembers();
-            //memberInfo.AddRange(type.GetProperties());
-            //memberInfo.AddRange(type.GetFields());
-            
-            var p = type.GetCustomAttribute<TrackingEntityAttribute>();
+            List<string> trackingPropertyElements = new List<string>();
 
-            //var members = type.GetMembers().Where(x => x == typeof(TrackingPropertyAttribute));
+            var p = type.GetCustomAttribute<TrackingEntityAttribute>();
 
             if (p is not null)
             {
@@ -41,7 +36,6 @@ namespace HW6
                     .Select(x => x)
                     .ToList();
 
-                    //filteredInfo.ForEach(x => trackingPropertyElements.Add($"{x.GetCustomAttribute<TrackingPropertyAttribute>().PropertyName ?? x.Name}: {((FieldInfo)x).GetValue(obj) ?? ((PropertyInfo)x).GetValue(obj)}"));
                 foreach (var item in filteredInfo)
                 {
                     var a = item.GetCustomAttribute<TrackingPropertyAttribute>();
@@ -49,28 +43,7 @@ namespace HW6
                     trackingPropertyElements.Add($"{a.PropertyName ?? item.Name}: " +
                         $"{(item.MemberType == MemberTypes.Field ? ((FieldInfo)item).GetValue(obj): ((PropertyInfo)item).GetValue(obj))}");
                 }
-                //var classProperties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
-                //var classFields = type.GetFields(BindingFlags.Public | BindingFlags.Instance);
-
-                //if (classProperties.Length != 0)
-                //{
-                //    foreach (var item in classProperties)
-                //    {
-                //        var a = item.GetCustomAttribute<TrackingPropertyAttribute>();
-                //        //turim tikrint del null
-                //        trackingPropertyElements.Add($"{a.PropertyName ?? item.Name}: {item.GetValue(obj)}");
-                //    }
-                //}
-
-                //if (classFields.Length != 0)
-                //{
-                //    foreach (var item in classFields)
-                //    {
-                //        var a = item.GetCustomAttribute<TrackingPropertyAttribute>();
-                //        trackingPropertyElements.Add($"{a.PropertyName ?? item.Name}: {item.GetValue(obj)}");
-                //    }
-                //}
-
+                
                 XmlSerializer serializer = new XmlSerializer(typeof(List<string>));
 
                 using (FileStream stream = new FileStream(jsonFileName, FileMode.OpenOrCreate))

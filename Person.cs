@@ -1,7 +1,6 @@
 ﻿using System;
 namespace HW6
 {
-    [Serializable]
     [TrackingEntity]
     public class Person
     {
