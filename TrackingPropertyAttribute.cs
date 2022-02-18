@@ -11,9 +11,5 @@ namespace HW6
         {
 
         }
-        //public TrackingPropertyAttribute(string propertyName)
-        //{
-        //    PropertyName = propertyName;
-        //}
     }
 }

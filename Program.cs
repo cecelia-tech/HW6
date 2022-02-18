@@ -8,7 +8,7 @@ namespace HW6
         {
             Logger test = new Logger("test.xml");
 
-            Person person = new Person("Simon", "Rogers", 47);
+            Person person = new Person("Simon", "Rogers", 47, "address");
 
             test.Tracker(person);
         }
