@@ -14,11 +14,12 @@ namespace HW6
         
         public Logger(string jsonFileName)
         {
-            if (jsonFileName is null)
+            if (string.IsNullOrEmpty(jsonFileName))
             {
-                throw new ArgumentNullException();
+                throw new ArgumentException();
             }
-            this.jsonFileName = jsonFileName;
+
+            this.jsonFileName = jsonFileName + ".xml";
         }
 
         public void Tracker<T>(T obj)
@@ -53,9 +54,9 @@ namespace HW6
 
                 foreach (var item in filteredMemberInfo)
                 {
-                    var a = item.GetCustomAttribute<TrackingPropertyAttribute>();
+                    var attribute = item.GetCustomAttribute<TrackingPropertyAttribute>();
 
-                    trackingPropertyElements.Add($"{a.PropertyName ?? item.Name}: " +
+                    trackingPropertyElements.Add($"{attribute.PropertyName ?? item.Name}: " +
                         $"{(item.MemberType == MemberTypes.Field ? ((FieldInfo)item).GetValue(obj) : ((PropertyInfo)item).GetValue(obj))}");
                 }
             }

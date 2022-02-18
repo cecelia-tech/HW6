@@ -6,7 +6,7 @@ namespace HW6
     {
         static void Main(string[] args)
         {
-            Logger test = new Logger("test.xml");
+            Logger test = new Logger("test");
 
             Person person = new Person("Simon", "Rogers", 47, "address");
 
