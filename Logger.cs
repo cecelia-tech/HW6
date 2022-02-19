@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Xml.Serialization;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 
 namespace HW6
 {
@@ -19,7 +20,7 @@ namespace HW6
                 throw new ArgumentException();
             }
 
-            this.jsonFileName = jsonFileName + ".xml";
+            this.jsonFileName = jsonFileName + ".json";
         }
 
         public void Tracker<T>(T obj)
@@ -28,12 +29,16 @@ namespace HW6
 
             if (infoToStore.Count() != 0 )
             {
-                XmlSerializer serializer = new XmlSerializer(typeof(List<string>));
-
-                using (FileStream stream = new FileStream(jsonFileName, FileMode.OpenOrCreate))
+                using (var fs = File.Create(jsonFileName))
                 {
-                    serializer.Serialize(stream, infoToStore);
+                    JsonSerializer.SerializeAsync(fs, infoToStore);
                 }
+                //XmlSerializer serializer = new XmlSerializer(typeof(List<string>));
+
+                //using (FileStream stream = new FileStream(jsonFileName, FileMode.OpenOrCreate))
+                //{
+                //    serializer.Serialize(stream, infoToStore);
+                //}
             }
         }
 
